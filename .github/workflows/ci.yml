@@ -1,35 +1,41 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
+# gives a name to your workflow this will appear in Github action tab as 'CI'
 name: Python CI
 
-# Triggers which initiate the workflow
+# Triggers which initiate the workflow (tells when to start the flow)
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
+# controls what workflow can acces, the job can only read the repo contents
 permissions:
   contents: read
 
 jobs:
   build:
-
+    # Tells GitHub which virtual machine (OS) to use.
     runs-on: ubuntu-latest # container
 
     steps:
+    # This uses a prebuilt GitHub Action to “checkout” your repo’s code.
     - name: Checkout the code
       uses: actions/checkout@v4
+
+    # specify the python version
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
+
+    # to install dependencies
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    # searches for file with *_test.py or test_*.py and run them
     - name: Test with unit test
       run: |
         pytest
